@@ -11,7 +11,7 @@ const AboutPage = React.lazy(() => import('../pages/about'));
 export const routes = [
   { path: '', label: 'Home', page: <HomePage></HomePage> },
   { path: '/todo', label: 'ToDo', page: <TodoPage></TodoPage> },
-  { path: '/about', label: 'About', page: <AboutPage></AboutPage> },
+  { path: '/about', label: 'Contact', page: <AboutPage></AboutPage> },
   { path: '*', label: '', page: <Navigate replace to=""></Navigate> },
 ];
 
