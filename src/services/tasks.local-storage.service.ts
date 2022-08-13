@@ -29,7 +29,7 @@ export function updateTask(updatedTask: iTask): iTask | undefined | null {
   const data = getData();
   if (data) {
     if (
-      (JSON.parse(data) as Array<iTask>).find(
+      !(JSON.parse(data) as Array<iTask>).find(
         (item) => item.id === updatedTask.id
       )
     )
