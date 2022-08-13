@@ -1,4 +1,5 @@
 import { SyntheticEvent, useState } from 'react';
+import { Button, Container, FloatingLabel, Form } from 'react-bootstrap';
 
 export function Contact() {
   const initialState = { name: '', email: '', message: '' };
@@ -19,34 +20,49 @@ export function Contact() {
   }
 
   const template = (
-    <form>
-      <label htmlFor="name">Name:</label>
-      <input
-        type="text"
-        id="name"
-        name="name"
-        value={formData.name}
-        onChange={handleChange}
-      />
-      <label htmlFor="name">Email:</label>
-      <input
-        type="text"
-        id="email"
-        name="email"
-        value={formData.email}
-        onChange={handleChange}
-      />
-      <label htmlFor="message">Message:</label>
-      <textarea
-        name="message"
-        id="message"
-        cols={40}
-        rows={6}
-        value={formData.message}
-        onChange={handleChange}
-      ></textarea>
-      <input type="button" value="Send" onClick={handleSend} />
-    </form>
+    <Form>
+      <Form.Group controlId="name" className="mb-3">
+        <FloatingLabel label="Name">
+          <Form.Control
+            placeholder="John Doe"
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+          />
+        </FloatingLabel>
+      </Form.Group>
+
+      <Form.Group controlId="email" className="mb-3">
+        <FloatingLabel label="Email">
+          <Form.Control
+            placeholder="name@example.com"
+            type="text"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+          />
+        </FloatingLabel>
+      </Form.Group>
+      <Form.Group controlId="message" className="mb-3">
+        <FloatingLabel label="Message">
+          <Form.Control
+            as={'textarea'}
+            maxLength={280}
+            placeholder="Write here your message"
+            style={{ height: '125px' }}
+            name="message"
+            value={formData.message}
+            onChange={handleChange}
+          />
+        </FloatingLabel>
+      </Form.Group>
+      <Container className="text-center">
+        <Button onClick={handleSend} type="button">
+          Send
+        </Button>
+      </Container>
+    </Form>
   );
   return template;
 }
