@@ -49,13 +49,16 @@ export function Task({ data }: { data: iTask }) {
     if (JSON.stringify(formData) !== JSON.stringify(data)) {
       const editedTask: iTask = {
         id: data.id,
-        responsible: formData.responsible ? formData.responsible : 'None',
-        description: formData.description
-          ? formData.description
+        responsible: formData.responsible.trim()
+          ? formData.responsible.trim()
+          : 'None',
+        description: formData.description.trim()
+          ? formData.description.trim()
           : 'Fill this task',
         completed: data.completed,
       };
       editTaskSend(editedTask);
+      setFormData(editedTask);
     }
     disableEdit();
   }
