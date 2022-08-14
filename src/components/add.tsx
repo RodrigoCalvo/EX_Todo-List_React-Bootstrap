@@ -1,4 +1,11 @@
 import { SyntheticEvent, useState } from 'react';
+import {
+  Button,
+  ButtonGroup,
+  Container,
+  FloatingLabel,
+  Form,
+} from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { iTask } from '../models/task';
 import { addTaskAction } from '../redux/tasks/task.action.creators';
@@ -39,34 +46,46 @@ export function Add() {
     setShowForm(!showForm);
   }
   const template = (
-    <div>
-      <button type="button" onClick={toggleForm}>
-        {showForm ? 'Cancel' : 'Add task'}
-      </button>
+    <Container className="mx-auto">
       {showForm ? (
-        <form>
-          <label htmlFor="responsible">Responsible:</label>
-          <input
-            type="text"
-            id="responsible"
-            name="responsible"
-            value={formData.responsible}
-            onChange={handleChange}
-          />
-          <label htmlFor="description">Description:</label>
-          <input
-            type="text"
-            id="description"
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-          />
-          <input type="button" value="Send" onClick={handleSend} />
-        </form>
+        <Form className="d-flex flex-column align-items-center mt-3">
+          <Form.Group className="my-2 w-100">
+            <FloatingLabel label="Responsible">
+              <Form.Control
+                placeholder="Responsible"
+                type="text"
+                name="responsible"
+                value={formData.responsible}
+                onChange={handleChange}
+              />
+            </FloatingLabel>
+          </Form.Group>
+          <Form.Group className="my-2 w-100">
+            <FloatingLabel label="Description">
+              <Form.Control
+                placeholder="Description"
+                type="text"
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+              />
+            </FloatingLabel>
+          </Form.Group>
+          <ButtonGroup>
+            <Button variant="success" type="button" onClick={handleSend}>
+              Save
+            </Button>
+            <Button variant="danger" type="button" onClick={toggleForm}>
+              Cancel
+            </Button>
+          </ButtonGroup>
+        </Form>
       ) : (
-        <></>
+        <Button type="button" className="mt-4 mx-auto" onClick={toggleForm}>
+          Add task
+        </Button>
       )}
-    </div>
+    </Container>
   );
   return template;
 }
