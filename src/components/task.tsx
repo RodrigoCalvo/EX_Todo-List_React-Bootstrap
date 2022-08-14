@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { SyntheticEvent, useState } from 'react';
 import { Button, Form, InputGroup } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { iTask } from '../models/task';
@@ -12,6 +12,7 @@ import {
 } from '../services/tasks.local-storage.service';
 
 export function Task({ data }: { data: iTask }) {
+  const [formData, setFormData] = useState(data);
   const [editable, setEditable] = useState(false);
   const dispatcher = useDispatch();
 
@@ -22,19 +23,44 @@ export function Task({ data }: { data: iTask }) {
 
   function toggleCompleted() {
     const newTask: iTask = { ...data, completed: !data.completed };
-    editTask(newTask);
+    editTaskSend(newTask);
   }
 
-  function toggleEdit() {
-    setEditable(!editable);
+  function enableEdit() {
+    setEditable(true);
   }
 
-  function editData() {
-    console.log('Guardando...');
-    toggleEdit();
+  function disableEdit() {
+    setEditable(false);
   }
 
-  function editTask(editedTask: iTask) {
+  function cancelEdit() {
+    setFormData(data);
+    disableEdit();
+  }
+
+  function handleEditChange(ev: SyntheticEvent) {
+    const eventTarget = ev.target as HTMLFormElement;
+    const newData = { ...formData, [eventTarget.name]: eventTarget.value };
+    setFormData(newData);
+  }
+
+  function saveEdit() {
+    if (JSON.stringify(formData) !== JSON.stringify(data)) {
+      const editedTask: iTask = {
+        id: data.id,
+        responsible: formData.responsible ? formData.responsible : 'None',
+        description: formData.description
+          ? formData.description
+          : 'Fill this task',
+        completed: data.completed,
+      };
+      editTaskSend(editedTask);
+    }
+    disableEdit();
+  }
+
+  function editTaskSend(editedTask: iTask) {
     updateTask(editedTask);
     dispatcher(updateTaskAction(editedTask));
   }
@@ -47,17 +73,35 @@ export function Task({ data }: { data: iTask }) {
           onChange={toggleCompleted}
         />
         <Form.Control
-          value={data.description}
+          name="description"
+          placeholder="Description"
+          value={formData.description}
           disabled={!editable}
+          onChange={handleEditChange}
         ></Form.Control>
         <Form.Control
-          value={data.responsible}
+          name="responsible"
+          placeholder="Responsible"
+          value={formData.responsible}
           disabled={!editable}
+          onChange={handleEditChange}
         ></Form.Control>
-        <Button onClick={!editable ? toggleEdit : editData}>
-          {editable ? 'Save' : 'Edit'}
-        </Button>
-        <Button onClick={deleteTask}>Delete</Button>
+        {editable ? (
+          <Button variant="success" onClick={saveEdit}>
+            Save
+          </Button>
+        ) : (
+          <Button onClick={enableEdit}>Edit</Button>
+        )}
+        {editable ? (
+          <Button variant="warning" onClick={cancelEdit}>
+            Cancel
+          </Button>
+        ) : (
+          <Button variant="danger" onClick={deleteTask}>
+            Delete
+          </Button>
+        )}
       </InputGroup>
     </>
   );
