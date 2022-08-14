@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 export enum actionTypes {
   'task@add' = 'task@add',
   'task@delete' = 'task@delete',
